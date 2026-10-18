@@ -1,0 +1,57 @@
+<resources>
+    <string name="app_name">YouMusic</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Ana Sayfa</string>
+    <string name="nav_search">Ara</string>
+    <string name="nav_library">Kitaplık</string>
+
+    <!-- Home Screen -->
+    <string name="greeting_morning">İyi sabahlar</string>
+    <string name="greeting_afternoon">İyi günler</string>
+    <string name="greeting_evening">İyi akşamlar</string>
+    <string name="greeting_night">İyi geceler</string>
+    <string name="section_trending">Günün Trendleri</string>
+    <string name="section_featured">Öne Çıkan Parçalar</string>
+
+    <!-- Search Screen -->
+    <string name="search_title">Ara</string>
+    <string name="search_placeholder">Şarkı, sanatçı veya podcast ara…</string>
+    <string name="search_browse_all">Hepsine Göz At</string>
+    <string name="search_no_results">Sonuç bulunamadı</string>
+    <string name="search_no_results_desc">Lütfen farklı bir şarkı veya sanatçı adı deneyin</string>
+
+    <!-- Categories & Filters -->
+    <string name="category_all">Tümü</string>
+    <string name="category_music">Müzik</string>
+    <string name="category_podcast">Podcast</string>
+    <string name="category_energy">Enerji</string>
+    <string name="category_focus">Odak</string>
+    <string name="category_relaxation">Rahatlama</string>
+
+    <string name="filter_songs">Şarkılar</string>
+    <string name="filter_artists">Sanatçılar</string>
+    <string name="filter_albums">Albümler</string>
+
+    <!-- Genres -->
+    <string name="genre_pop">Pop</string>
+    <string name="genre_hiphop">Hip-Hop &amp; Rap</string>
+    <string name="genre_rock">Rock &amp; Metal</string>
+    <string name="genre_electronic">Elektronik &amp; Dans</string>
+    <string name="genre_acoustic">Akustik &amp; Indie</string>
+    <string name="genre_jazz">Caz &amp; Blues</string>
+    <string name="genre_workout">Antrenman</string>
+    <string name="genre_focus">Odak &amp; Gece</string>
+
+    <!-- Player Screen -->
+    <string name="player_now_playing">Şu an çalıyor</string>
+    <string name="player_upcoming_tracks">Sıradaki Parçalar (%d)</string>
+
+    <!-- Library Screen -->
+    <string name="library_title">Kitaplığın</string>
+    <string name="library_liked_songs">Beğenilen Şarkılar</string>
+    <string name="library_songs_saved">%d şarkı kaydedildi</string>
+    <string name="library_playlists">Çalma Listelerin</string>
+    <string name="library_recently_added">Son Eklenen Parçalar</string>
+    <string name="library_playlist_info">Çalma Listesi • %1$s • %2$d şarkı</string>
+</resources>

@@ -1,0 +1,409 @@
+package tm.you.music.feature.search
+
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
+import tm.you.music.core.designsystem.R
+import tm.you.music.core.designsystem.component.TrackItemCard
+import tm.you.music.core.designsystem.theme.LargeIncreasedShape
+import tm.you.music.core.designsystem.theme.TitleLargeEmphasized
+import tm.you.music.core.designsystem.theme.TitleMediumEmphasized
+import tm.you.music.core.designsystem.theme.YouMusicMotion
+import tm.you.music.core.model.Song
+
+@Composable
+fun SearchRoute(
+    onSongClick: (Song) -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: SearchViewModel = hiltViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    SearchScreen(
+        uiState = uiState,
+        onQueryChange = viewModel::onQueryChanged,
+        onClearQuery = viewModel::onClearQuery,
+        onFilterSelect = viewModel::onFilterSelected,
+        onGenreClick = viewModel::onGenreClick,
+        onSongClick = onSongClick,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun SearchScreen(
+    uiState: SearchUiState,
+    onQueryChange: (String) -> Unit,
+    onClearQuery: () -> Unit,
+    onFilterSelect: (SearchFilter) -> Unit,
+    onGenreClick: (MusicGenre) -> Unit,
+    onSongClick: (Song) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surface)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 16.dp)
+        ) {
+            Text(
+                text = stringResource(R.string.search_title),
+                style = TitleLargeEmphasized,
+                color = MaterialTheme.colorScheme.onSurface,
+                fontSize = 28.sp
+            )
+
+            Spacer(modifier = Modifier.height(14.dp))
+
+            ExpressiveSearchBar(
+                query = uiState.query,
+                onQueryChange = onQueryChange,
+                onClearQuery = onClearQuery
+            )
+        }
+
+        if (uiState.isSearching) {
+            LazyRow(
+                contentPadding = PaddingValues(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.padding(bottom = 12.dp)
+            ) {
+                items(uiState.filters) { filter ->
+                    val isSelected = filter == uiState.selectedFilter
+                    SearchFilterChip(
+                        text = stringResource(filter.labelRes),
+                        isSelected = isSelected,
+                        onClick = { onFilterSelect(filter) }
+                    )
+                }
+            }
+
+            SearchResultsSection(
+                songs = uiState.searchResults,
+                isLoading = uiState.isLoadingResults,
+                onSongClick = onSongClick
+            )
+        } else {
+            GenresGridSection(
+                genres = uiState.genres,
+                onGenreClick = onGenreClick
+            )
+        }
+    }
+}
+
+@Composable
+private fun ExpressiveSearchBar(
+    query: String,
+    onQueryChange: (String) -> Unit,
+    onClearQuery: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(52.dp)
+            .clip(CircleShape)
+            .background(MaterialTheme.colorScheme.surfaceContainer)
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f),
+                shape = CircleShape
+            )
+            .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        androidx.compose.foundation.Canvas(modifier = Modifier.size(20.dp)) {
+            val strokeWidth = 2.5f.dp.toPx()
+            val radius = size.width * 0.35f
+            val center = androidx.compose.ui.geometry.Offset(size.width * 0.42f, size.height * 0.42f)
+
+            drawCircle(
+                color = androidx.compose.ui.graphics.Color(0xFF88D7B3),
+                radius = radius,
+                center = center,
+                style = androidx.compose.ui.graphics.drawscope.Stroke(width = strokeWidth)
+            )
+
+            drawLine(
+                color = androidx.compose.ui.graphics.Color(0xFF88D7B3),
+                start = androidx.compose.ui.geometry.Offset(center.x + radius * 0.7f, center.y + radius * 0.7f),
+                end = androidx.compose.ui.geometry.Offset(size.width * 0.92f, size.height * 0.92f),
+                strokeWidth = strokeWidth,
+                cap = androidx.compose.ui.graphics.StrokeCap.Round
+            )
+        }
+
+        Spacer(modifier = Modifier.width(12.dp))
+
+        Box(
+            modifier = Modifier.weight(1f),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            if (query.isEmpty()) {
+                Text(
+                    text = stringResource(R.string.search_placeholder),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            BasicTextField(
+                value = query,
+                onValueChange = onQueryChange,
+                singleLine = true,
+                textStyle = TextStyle(
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Normal
+                ),
+                cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+
+        if (query.isNotEmpty()) {
+            Box(
+                modifier = Modifier
+                    .size(36.dp)
+                    .clip(CircleShape)
+                    .clickable(onClick = onClearQuery),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "✕",
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun SearchFilterChip(
+    text: String,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+    val containerColor = if (isSelected) {
+        MaterialTheme.colorScheme.primary
+    } else {
+        MaterialTheme.colorScheme.surfaceContainer
+    }
+
+    val contentColor = if (isSelected) {
+        MaterialTheme.colorScheme.onPrimary
+    } else {
+        MaterialTheme.colorScheme.onSurface
+    }
+
+    Box(
+        modifier = Modifier
+            .clip(CircleShape)
+            .background(containerColor)
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.labelMedium,
+            color = contentColor
+        )
+    }
+}
+
+@Composable
+private fun SearchResultsSection(
+    songs: List<Song>,
+    isLoading: Boolean,
+    onSongClick: (Song) -> Unit
+) {
+    if (isLoading) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = 110.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(
+                color = MaterialTheme.colorScheme.primary
+            )
+        }
+    } else if (songs.isEmpty()) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = 110.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    text = stringResource(R.string.search_no_results),
+                    style = TitleMediumEmphasized,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(modifier = Modifier.height(6.dp))
+                Text(
+                    text = stringResource(R.string.search_no_results_desc),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+    } else {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 110.dp)
+        ) {
+            items(songs) { song ->
+                TrackItemCard(
+                    song = song,
+                    onClick = { onSongClick(song) }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun GenresGridSection(
+    genres: List<MusicGenre>,
+    onGenreClick: (MusicGenre) -> Unit
+) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 110.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        item {
+            Text(
+                text = stringResource(R.string.search_browse_all),
+                style = TitleLargeEmphasized,
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+        }
+
+        val chunked = genres.chunked(2)
+        items(chunked) { rowGenres ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                rowGenres.forEach { genre ->
+                    GenreCard(
+                        genre = genre,
+                        onClick = { onGenreClick(genre) },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+                if (rowGenres.size == 1) {
+                    Spacer(modifier = Modifier.weight(1f))
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun GenreCard(
+    genre: MusicGenre,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+
+    val scale by animateFloatAsState(
+        targetValue = if (isPressed) 0.96f else 1f,
+        animationSpec = YouMusicMotion.SpatialExpressiveFast,
+        label = "GenreCardScale"
+    )
+
+    Box(
+        modifier = modifier
+            .height(98.dp)
+            .scale(scale)
+            .clip(LargeIncreasedShape)
+            .background(Color(genre.hexColor))
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = onClick
+            )
+            .padding(14.dp)
+    ) {
+        Text(
+            text = stringResource(genre.titleRes),
+            style = TitleMediumEmphasized,
+            color = Color.White,
+            modifier = Modifier.align(Alignment.TopStart)
+        )
+
+        if (!genre.imageUrl.isNullOrEmpty()) {
+            Box(
+                modifier = Modifier
+                    .size(54.dp)
+                    .align(Alignment.BottomEnd)
+                    .rotate(18f)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(MaterialTheme.colorScheme.surfaceContainerLowest)
+            ) {
+                AsyncImage(
+                    model = genre.imageUrl,
+                    contentDescription = stringResource(genre.titleRes),
+                    modifier = Modifier.matchParentSize(),
+                    contentScale = ContentScale.Crop
+                )
+            }
+        }
+    }
+}

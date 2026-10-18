@@ -1,0 +1,57 @@
+<resources>
+    <string name="app_name">YouMusic</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_search">Search</string>
+    <string name="nav_library">Library</string>
+
+    <!-- Home Screen -->
+    <string name="greeting_morning">Good morning</string>
+    <string name="greeting_afternoon">Good afternoon</string>
+    <string name="greeting_evening">Good evening</string>
+    <string name="greeting_night">Good night</string>
+    <string name="section_trending">Today\'s Hits</string>
+    <string name="section_featured">Featured Tracks</string>
+
+    <!-- Search Screen -->
+    <string name="search_title">Search</string>
+    <string name="search_placeholder">Search songs, artists or podcasts…</string>
+    <string name="search_browse_all">Browse all</string>
+    <string name="search_no_results">No results found</string>
+    <string name="search_no_results_desc">Please try a different song or artist name</string>
+
+    <!-- Categories & Filters -->
+    <string name="category_all">All</string>
+    <string name="category_music">Music</string>
+    <string name="category_podcast">Podcasts</string>
+    <string name="category_energy">Energy</string>
+    <string name="category_focus">Focus</string>
+    <string name="category_relaxation">Relaxation</string>
+
+    <string name="filter_songs">Songs</string>
+    <string name="filter_artists">Artists</string>
+    <string name="filter_albums">Albums</string>
+
+    <!-- Genres -->
+    <string name="genre_pop">Pop</string>
+    <string name="genre_hiphop">Hip-Hop &amp; Rap</string>
+    <string name="genre_rock">Rock &amp; Metal</string>
+    <string name="genre_electronic">Electronic &amp; Dance</string>
+    <string name="genre_acoustic">Acoustic &amp; Indie</string>
+    <string name="genre_jazz">Jazz &amp; Blues</string>
+    <string name="genre_workout">Workout</string>
+    <string name="genre_focus">Focus &amp; Night</string>
+
+    <!-- Player Screen -->
+    <string name="player_now_playing">Now Playing</string>
+    <string name="player_upcoming_tracks">Upcoming Tracks (%d)</string>
+
+    <!-- Library Screen -->
+    <string name="library_title">Your Library</string>
+    <string name="library_liked_songs">Liked Songs</string>
+    <string name="library_songs_saved">%d songs saved</string>
+    <string name="library_playlists">Your Playlists</string>
+    <string name="library_recently_added">Recently Added</string>
+    <string name="library_playlist_info">Playlist • %1$s • %2$d songs</string>
+</resources>
