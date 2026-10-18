@@ -100,11 +100,11 @@ fun YouMusicApp(
                 visible = isFullPlayerExpanded,
                 enter = slideInVertically(
                     initialOffsetY = { it },
-                    animationSpec = YouMusicMotion.SpatialExpressiveDefault
+                    animationSpec = YouMusicMotion.OffsetSpatialExpressiveDefault
                 ),
                 exit = slideOutVertically(
                     targetOffsetY = { it },
-                    animationSpec = YouMusicMotion.SpatialExpressiveFast
+                    animationSpec = YouMusicMotion.OffsetSpatialExpressiveFast
                 )
             ) {
                 PlayerRoute(

@@ -52,11 +52,11 @@ fun LevitatedMiniPlayer(
         visible = isVisible,
         enter = slideInVertically(
             initialOffsetY = { it },
-            animationSpec = YouMusicMotion.SpatialExpressiveFast
+            animationSpec = YouMusicMotion.OffsetSpatialExpressiveFast
         ) + fadeIn(animationSpec = YouMusicMotion.EffectExpressive),
         exit = slideOutVertically(
             targetOffsetY = { it },
-            animationSpec = YouMusicMotion.SpatialExpressiveFast
+            animationSpec = YouMusicMotion.OffsetSpatialExpressiveFast
         ) + fadeOut(animationSpec = YouMusicMotion.EffectExpressive),
         modifier = modifier
     ) {
