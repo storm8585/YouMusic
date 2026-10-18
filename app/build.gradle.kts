@@ -45,12 +45,13 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.11"
     }
+    val targetAbi = (project.findProperty("targetAbi") as? String)?.takeIf { it.isNotBlank() } ?: "armeabi-v7a"
     splits {
         abi {
             isEnable = true
             reset()
-            include("armeabi-v7a", "arm64-v8a", "x86_64")
-            isUniversalApk = true
+            include(targetAbi)
+            isUniversalApk = false
         }
     }
     packaging {

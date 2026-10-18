@@ -34,9 +34,9 @@ jobs:
       - name: Build ARMv7 Debug APK
         run: |
           if [ -f "./gradlew" ] && [ -f "./gradle/wrapper/gradle-wrapper.jar" ]; then
-            ./gradlew :app:assembleArmeabi-v7aDebug --stacktrace
+            ./gradlew :app:assembleDebug -PtargetAbi=armeabi-v7a --stacktrace
           else
-            gradle :app:assembleArmeabi-v7aDebug --stacktrace
+            gradle :app:assembleDebug -PtargetAbi=armeabi-v7a --stacktrace
           fi
 
       - name: Upload ARMv7 Debug APK Artifact
