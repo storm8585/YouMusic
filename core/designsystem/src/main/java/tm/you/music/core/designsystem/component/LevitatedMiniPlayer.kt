@@ -25,7 +25,7 @@ import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.ripple
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -89,7 +89,7 @@ fun LevitatedMiniPlayer(
                     )
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
-                        indication = ripple(),
+                        indication = rememberRipple(),
                         onClick = onExpandPlayer
                     )
             ) {
@@ -176,7 +176,7 @@ private fun SkipNextIconButton(
             .clip(CircleShape)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(bounded = false, radius = 20.dp),
+                indication = rememberRipple(bounded = false, radius = 20.dp),
                 onClick = onClick
             ),
         contentAlignment = Alignment.Center

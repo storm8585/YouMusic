@@ -24,7 +24,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.ripple
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -282,7 +282,7 @@ private fun QuickAccessCard(
             .background(MaterialTheme.colorScheme.surfaceContainerLow)
             .clickable(
                 interactionSource = interactionSource,
-                indication = ripple(),
+                indication = rememberRipple(),
                 onClick = onClick
             ),
         verticalAlignment = Alignment.CenterVertically
@@ -339,7 +339,7 @@ private fun TrendingSongCard(
             .clip(MaterialTheme.shapes.medium)
             .clickable(
                 interactionSource = interactionSource,
-                indication = ripple(),
+                indication = rememberRipple(),
                 onClick = onClick
             )
     ) {

@@ -30,7 +30,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.ripple
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -140,7 +140,7 @@ private fun ExpressiveDockItem(
             .clip(CircleShape)
             .clickable(
                 interactionSource = interactionSource,
-                indication = ripple(),
+                indication = rememberRipple(),
                 onClick = onClick
             )
             .padding(horizontal = 8.dp, vertical = 4.dp),

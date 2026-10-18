@@ -28,7 +28,7 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.ripple
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -243,7 +243,7 @@ private fun LikedSongsPinnedBanner(
             )
             .clickable(
                 interactionSource = interactionSource,
-                indication = ripple(),
+                indication = rememberRipple(),
                 onClick = onClick
             )
             .padding(18.dp)
@@ -323,7 +323,7 @@ private fun PlaylistItemCard(
             .clip(MaterialTheme.shapes.medium)
             .clickable(
                 interactionSource = interactionSource,
-                indication = ripple(),
+                indication = rememberRipple(),
                 onClick = onClick
             )
             .padding(horizontal = 16.dp, vertical = 8.dp),

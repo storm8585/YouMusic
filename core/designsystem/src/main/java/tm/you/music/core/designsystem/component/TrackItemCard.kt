@@ -17,7 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.ripple
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -58,7 +58,7 @@ fun TrackItemCard(
             .clip(MaterialTheme.shapes.medium)
             .clickable(
                 interactionSource = interactionSource,
-                indication = ripple(),
+                indication = rememberRipple(),
                 onClick = onClick
             )
             .padding(horizontal = 12.dp, vertical = 6.dp),

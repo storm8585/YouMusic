@@ -14,7 +14,7 @@ import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ripple
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -55,7 +55,7 @@ fun ExpressivePlayPauseButton(
             .background(containerColor)
             .clickable(
                 interactionSource = interactionSource,
-                indication = ripple(color = contentColor),
+                indication = rememberRipple(color = contentColor),
                 onClick = onTogglePlayPause
             ),
         contentAlignment = Alignment.Center
@@ -94,7 +94,7 @@ fun ExpressiveIconButton(
             .clip(CircleShape)
             .clickable(
                 interactionSource = interactionSource,
-                indication = ripple(bounded = false, radius = size / 2),
+                indication = rememberRipple(bounded = false, radius = size / 2),
                 onClick = onClick
             ),
         contentAlignment = Alignment.Center

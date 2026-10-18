@@ -4,7 +4,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.material3.ripple
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.remember
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -386,7 +386,7 @@ private fun QueueDrawerPeek(
             .background(MaterialTheme.colorScheme.surfaceContainerLow)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(),
+                indication = rememberRipple(),
                 onClick = onClick
             )
             .padding(horizontal = 20.dp, vertical = 12.dp),
