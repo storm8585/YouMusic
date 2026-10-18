@@ -22,6 +22,11 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -74,7 +79,7 @@ fun LibraryScreen(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.surface),
-        contentPadding = PaddingValues(bottom = 110.dp)
+        contentPadding = PaddingValues(bottom = 150.dp)
     ) {
         item {
             LibraryHeaderSection(
@@ -169,7 +174,12 @@ private fun LibraryHeaderSection(
                         .clickable { },
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(text = "+", color = MaterialTheme.colorScheme.onSurface, fontSize = 24.sp)
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Add playlist",
+                        tint = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.size(24.dp)
+                    )
                 }
             }
         }
@@ -250,10 +260,11 @@ private fun LikedSongsPinnedBanner(
                     .background(MaterialTheme.colorScheme.primary),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = "♥",
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    fontSize = 26.sp
+                Icon(
+                    imageVector = Icons.Default.Favorite,
+                    contentDescription = "Liked songs",
+                    tint = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier.size(28.dp)
                 )
             }
 
@@ -281,10 +292,11 @@ private fun LikedSongsPinnedBanner(
                     .background(MaterialTheme.colorScheme.surfaceContainerLowest),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = "▶",
-                    color = MaterialTheme.colorScheme.primary,
-                    fontSize = 14.sp
+                Icon(
+                    imageVector = Icons.Default.PlayArrow,
+                    contentDescription = "Play",
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(22.dp)
                 )
             }
         }

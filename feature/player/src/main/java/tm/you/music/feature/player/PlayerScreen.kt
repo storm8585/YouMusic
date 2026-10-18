@@ -18,6 +18,17 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Repeat
+import androidx.compose.material.icons.filled.Shuffle
+import androidx.compose.material.icons.filled.SkipNext
+import androidx.compose.material.icons.filled.SkipPrevious
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -179,22 +190,12 @@ private fun PlayerTopBar(
                 .clickable(onClick = onDismiss),
             contentAlignment = Alignment.Center
         ) {
-            androidx.compose.foundation.Canvas(modifier = Modifier.size(20.dp)) {
-                val path = Path().apply {
-                    moveTo(size.width * 0.2f, size.height * 0.35f)
-                    lineTo(size.width * 0.5f, size.height * 0.65f)
-                    lineTo(size.width * 0.8f, size.height * 0.35f)
-                }
-                drawPath(
-                    path = path,
-                    color = androidx.compose.ui.graphics.Color(0xFFDFE4DE),
-                    style = androidx.compose.ui.graphics.drawscope.Stroke(
-                        width = 2.5f.dp.toPx(),
-                        cap = androidx.compose.ui.graphics.StrokeCap.Round,
-                        join = androidx.compose.ui.graphics.StrokeJoin.Round
-                    )
-                )
-            }
+            Icon(
+                imageVector = Icons.Default.KeyboardArrowDown,
+                contentDescription = "Dismiss",
+                tint = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.size(28.dp)
+            )
         }
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -223,10 +224,11 @@ private fun PlayerTopBar(
                 .clickable { },
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = "⋮",
-                color = MaterialTheme.colorScheme.onSurface,
-                fontSize = 22.sp
+            Icon(
+                imageVector = Icons.Default.MoreVert,
+                contentDescription = "More",
+                tint = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.size(24.dp)
             )
         }
     }
@@ -272,10 +274,11 @@ private fun PlayerSongInfoRow(
             contentAlignment = Alignment.Center
         ) {
             val heartColor = if (isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
-            Text(
-                text = if (isFavorite) "♥" else "♡",
-                color = heartColor,
-                fontSize = 26.sp
+            Icon(
+                imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                contentDescription = "Favorite",
+                tint = heartColor,
+                modifier = Modifier.size(26.dp)
             )
         }
     }
@@ -305,7 +308,12 @@ private fun PlayerControlsSection(
             contentAlignment = Alignment.Center
         ) {
             val tint = if (isShuffle) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
-            Text(text = "⇄", color = tint, fontSize = 20.sp)
+            Icon(
+                imageVector = Icons.Default.Shuffle,
+                contentDescription = "Shuffle",
+                tint = tint,
+                modifier = Modifier.size(22.dp)
+            )
         }
 
         Box(
@@ -315,7 +323,12 @@ private fun PlayerControlsSection(
                 .clickable(onClick = onSkipPrevious),
             contentAlignment = Alignment.Center
         ) {
-            PreviousIcon(tint = MaterialTheme.colorScheme.onSurface)
+            Icon(
+                imageVector = Icons.Default.SkipPrevious,
+                contentDescription = "Previous",
+                tint = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.size(32.dp)
+            )
         }
 
         ExpressivePlayPauseButton(
@@ -333,7 +346,12 @@ private fun PlayerControlsSection(
                 .clickable(onClick = onSkipNext),
             contentAlignment = Alignment.Center
         ) {
-            NextIcon(tint = MaterialTheme.colorScheme.onSurface)
+            Icon(
+                imageVector = Icons.Default.SkipNext,
+                contentDescription = "Next",
+                tint = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.size(32.dp)
+            )
         }
 
         Box(
@@ -344,7 +362,12 @@ private fun PlayerControlsSection(
             contentAlignment = Alignment.Center
         ) {
             val tint = if (isRepeat) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
-            Text(text = "↻", color = tint, fontSize = 20.sp)
+            Icon(
+                imageVector = Icons.Default.Repeat,
+                contentDescription = "Repeat",
+                tint = tint,
+                modifier = Modifier.size(22.dp)
+            )
         }
     }
 }
@@ -373,56 +396,12 @@ private fun QueueDrawerPeek(
                 color = MaterialTheme.colorScheme.onSurface
             )
             Spacer(modifier = Modifier.width(6.dp))
-            Text(
-                text = "▲",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.primary,
-                fontSize = 10.sp
+            Icon(
+                imageVector = Icons.Default.KeyboardArrowUp,
+                contentDescription = "Expand queue",
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(16.dp)
             )
         }
-    }
-}
-
-@Composable
-private fun NextIcon(tint: Color) {
-    androidx.compose.foundation.Canvas(modifier = Modifier.size(22.dp)) {
-        val w = size.width
-        val h = size.height
-
-        val trianglePath = Path().apply {
-            moveTo(0f, 0f)
-            lineTo(w * 0.72f, h * 0.5f)
-            lineTo(0f, h)
-            close()
-        }
-        drawPath(path = trianglePath, color = tint)
-
-        drawRect(
-            color = tint,
-            topLeft = androidx.compose.ui.geometry.Offset(w * 0.8f, 0f),
-            size = androidx.compose.ui.geometry.Size(w * 0.2f, h)
-        )
-    }
-}
-
-@Composable
-private fun PreviousIcon(tint: Color) {
-    androidx.compose.foundation.Canvas(modifier = Modifier.size(22.dp)) {
-        val w = size.width
-        val h = size.height
-
-        val trianglePath = Path().apply {
-            moveTo(w, 0f)
-            lineTo(w * 0.28f, h * 0.5f)
-            lineTo(w, h)
-            close()
-        }
-        drawPath(path = trianglePath, color = tint)
-
-        drawRect(
-            color = tint,
-            topLeft = androidx.compose.ui.geometry.Offset(0f, 0f),
-            size = androidx.compose.ui.geometry.Size(w * 0.2f, h)
-        )
     }
 }

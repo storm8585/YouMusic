@@ -24,7 +24,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -159,26 +163,12 @@ private fun ExpressiveSearchBar(
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        androidx.compose.foundation.Canvas(modifier = Modifier.size(20.dp)) {
-            val strokeWidth = 2.5f.dp.toPx()
-            val radius = size.width * 0.35f
-            val center = androidx.compose.ui.geometry.Offset(size.width * 0.42f, size.height * 0.42f)
-
-            drawCircle(
-                color = androidx.compose.ui.graphics.Color(0xFF88D7B3),
-                radius = radius,
-                center = center,
-                style = androidx.compose.ui.graphics.drawscope.Stroke(width = strokeWidth)
-            )
-
-            drawLine(
-                color = androidx.compose.ui.graphics.Color(0xFF88D7B3),
-                start = androidx.compose.ui.geometry.Offset(center.x + radius * 0.7f, center.y + radius * 0.7f),
-                end = androidx.compose.ui.geometry.Offset(size.width * 0.92f, size.height * 0.92f),
-                strokeWidth = strokeWidth,
-                cap = androidx.compose.ui.graphics.StrokeCap.Round
-            )
-        }
+        Icon(
+            imageVector = Icons.Default.Search,
+            contentDescription = "Search",
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.size(24.dp)
+        )
 
         Spacer(modifier = Modifier.width(12.dp))
 
@@ -215,11 +205,11 @@ private fun ExpressiveSearchBar(
                     .clickable(onClick = onClearQuery),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = "✕",
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = "Clear",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(20.dp)
                 )
             }
         }
@@ -301,7 +291,7 @@ private fun SearchResultsSection(
     } else {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 110.dp)
+            contentPadding = PaddingValues(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 150.dp)
         ) {
             items(songs) { song ->
                 TrackItemCard(
@@ -320,7 +310,7 @@ private fun GenresGridSection(
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 110.dp),
+        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 150.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         item {

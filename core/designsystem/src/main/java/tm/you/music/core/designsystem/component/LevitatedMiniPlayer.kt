@@ -20,6 +20,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.SkipNext
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -173,26 +176,11 @@ private fun SkipNextIconButton(
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
-        androidx.compose.foundation.Canvas(modifier = Modifier.size(18.dp)) {
-            val width = size.width
-            val height = size.height
-
-            val trianglePath = androidx.compose.ui.graphics.Path().apply {
-                moveTo(0f, 0f)
-                lineTo(width * 0.7f, height * 0.5f)
-                lineTo(0f, height)
-                close()
-            }
-            drawPath(
-                path = trianglePath,
-                color = androidx.compose.ui.graphics.Color(0xFFDFE4DE)
-            )
-
-            drawRect(
-                color = androidx.compose.ui.graphics.Color(0xFFDFE4DE),
-                topLeft = androidx.compose.ui.geometry.Offset(width * 0.78f, 0f),
-                size = androidx.compose.ui.geometry.Size(width * 0.22f, height)
-            )
-        }
+        Icon(
+            imageVector = Icons.Default.SkipNext,
+            contentDescription = "Next",
+            tint = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.size(24.dp)
+        )
     }
 }

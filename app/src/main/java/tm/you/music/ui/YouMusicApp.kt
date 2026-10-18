@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
@@ -57,11 +58,12 @@ fun YouMusicApp(
                 navController = navController,
                 onSongClick = { song ->
                     mainViewModel.playSong(song)
+                    isFullPlayerExpanded = true
                 },
                 modifier = Modifier.fillMaxSize()
             )
 
-            Box(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
@@ -71,9 +73,7 @@ fun YouMusicApp(
                     onExpandPlayer = { isFullPlayerExpanded = true },
                     onTogglePlayPause = mainViewModel::togglePlayPause,
                     onNextTrack = mainViewModel::skipNext,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.TopCenter)
+                    modifier = Modifier.fillMaxWidth()
                 )
 
                 YouMusicBottomBar(
@@ -92,7 +92,7 @@ fun YouMusicApp(
                             YouMusicTopLevelDestination.LIBRARY -> navController.navigateToLibrary(topLevelNavOptions)
                         }
                     },
-                    modifier = Modifier.align(Alignment.BottomCenter)
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
 

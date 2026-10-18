@@ -22,7 +22,7 @@ class InnertubeMusicDataSource @Inject constructor(
 ) : MusicDataSource {
 
     private val searchUrl = "https://music.youtube.com/youtubei/v1/search?prettyPrint=false"
-    private val playerUrl = "https://music.youtube.com/youtubei/v1/player?prettyPrint=false"
+    private val playerUrl = "https://www.youtube.com/youtubei/v1/player?prettyPrint=false"
 
     override suspend fun searchSongs(query: String): List<Song> = withContext(ioDispatcher) {
         val payload = JSONObject().apply {
@@ -47,18 +47,26 @@ class InnertubeMusicDataSource @Inject constructor(
     }
 
     override suspend fun getStreamUrl(songId: String): AudioStream = withContext(ioDispatcher) {
-        val payload = JSONObject().apply {
-            put("context", createAndroidVrContext())
-            put("videoId", songId)
+        val contexts = listOf(
+            createAndroidVrContext(),
+            createIosContext()
+        )
+
+        for (contextObj in contexts) {
+            val payload = JSONObject().apply {
+                put("context", contextObj)
+                put("videoId", songId)
+            }
+            val jsonString = postJson(playerUrl, payload.toString(), includeApiKey = false)
+            if (jsonString != null) {
+                val directStream = parsePlayerResponse(jsonString)
+                if (directStream != null && directStream.url.isNotEmpty()) {
+                    return@withContext directStream
+                }
+            }
         }
 
-        val jsonString = postJson(playerUrl, payload.toString())
-        if (jsonString != null) {
-            val directStream = parsePlayerResponse(jsonString)
-            if (directStream != null) return@withContext directStream
-        }
-
-        fetchPipedFallbackStream(songId)
+        AudioStream(url = "", bitrate = 0, format = "")
     }
 
     private fun createWebRemixContext(): JSONObject {
@@ -88,19 +96,35 @@ class InnertubeMusicDataSource @Inject constructor(
         }
     }
 
-    private fun postJson(urlString: String, jsonBody: String): String? {
+    private fun createIosContext(): JSONObject {
+        val client = JSONObject().apply {
+            put("clientName", "IOS")
+            put("clientVersion", "19.29.1")
+            put("deviceMake", "Apple")
+            put("deviceModel", "iPhone16,2")
+            put("hl", "en")
+            put("gl", "US")
+        }
+        return JSONObject().apply {
+            put("client", client)
+        }
+    }
+
+    private fun postJson(urlString: String, jsonBody: String, includeApiKey: Boolean = true): String? {
         return try {
             val url = URL(urlString)
             val connection = (url.openConnection() as HttpURLConnection).apply {
                 requestMethod = "POST"
                 doOutput = true
                 doInput = true
-                connectTimeout = 8000
-                readTimeout = 8000
+                connectTimeout = 6000
+                readTimeout = 6000
                 setRequestProperty("Content-Type", "application/json")
                 setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
-                setRequestProperty("X-Goog-Api-Key", "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8")
-                setRequestProperty("X-Origin", "https://music.youtube.com")
+                if (includeApiKey) {
+                    setRequestProperty("X-Goog-Api-Key", "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8")
+                    setRequestProperty("X-Origin", "https://music.youtube.com")
+                }
             }
 
             OutputStreamWriter(connection.outputStream).use { writer ->
@@ -243,34 +267,5 @@ class InnertubeMusicDataSource @Inject constructor(
         } catch (e: Exception) {
             null
         }
-    }
-
-    private fun fetchPipedFallbackStream(songId: String): AudioStream {
-        val fallbackUrl = "https://pipedapi.kavin.rocks/streams/$songId"
-        try {
-            val url = URL(fallbackUrl)
-            val connection = (url.openConnection() as HttpURLConnection).apply {
-                requestMethod = "GET"
-                connectTimeout = 5000
-                readTimeout = 5000
-                setRequestProperty("User-Agent", "Mozilla/5.0")
-            }
-
-            if (connection.responseCode in 200..299) {
-                val response = BufferedReader(InputStreamReader(connection.inputStream)).use { it.readText() }
-                val root = JSONObject(response)
-                val audioStreams = root.optJSONArray("audioStreams")
-                if (audioStreams != null && audioStreams.length() > 0) {
-                    val bestStream = audioStreams.getJSONObject(0)
-                    val streamUrl = bestStream.optString("url")
-                    val bitrate = bestStream.optInt("bitrate", 128000)
-                    val format = bestStream.optString("format", "m4a")
-                    return AudioStream(url = streamUrl, bitrate = bitrate, format = format)
-                }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return AudioStream(url = "", bitrate = 0, format = "")
     }
 }

@@ -280,7 +280,7 @@ class MusicPlayerImpl @Inject constructor(
     private fun startForegroundService() {
         try {
             val intent = Intent(context, MusicService::class.java)
-            ContextCompat.startForegroundService(context, intent)
+            context.startService(intent)
         } catch (e: Exception) {
             e.printStackTrace()
         }

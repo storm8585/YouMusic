@@ -1,6 +1,10 @@
 package tm.you.music.navigation
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -10,13 +14,21 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.LibraryMusic
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,12 +38,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import tm.you.music.core.designsystem.R
-import tm.you.music.core.designsystem.theme.YouMusicMotion
 
 enum class YouMusicTopLevelDestination(
     val route: String,
@@ -51,29 +62,45 @@ fun YouMusicBottomBar(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .navigationBarsPadding()
-            .padding(horizontal = 16.dp, vertical = 6.dp)
+            .padding(horizontal = 24.dp, vertical = 8.dp)
+            .navigationBarsPadding(),
+        contentAlignment = Alignment.Center
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround,
-            verticalAlignment = Alignment.CenterVertically
+        Surface(
+            shape = CircleShape,
+            color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.96f),
+            tonalElevation = 6.dp,
+            shadowElevation = 8.dp,
+            border = BorderStroke(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
+            ),
+            modifier = Modifier
+                .height(64.dp)
+                .fillMaxWidth()
         ) {
-            YouMusicTopLevelDestination.values().forEach { destination ->
-                val isSelected = currentRoute == destination.route
-                BottomNavItem(
-                    destination = destination,
-                    isSelected = isSelected,
-                    onClick = { onNavigateToDestination(destination) }
-                )
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 12.dp),
+                horizontalArrangement = Arrangement.SpaceAround,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                YouMusicTopLevelDestination.values().forEach { destination ->
+                    val isSelected = currentRoute == destination.route
+                    ExpressiveDockItem(
+                        destination = destination,
+                        isSelected = isSelected,
+                        onClick = { onNavigateToDestination(destination) }
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-private fun BottomNavItem(
+private fun ExpressiveDockItem(
     destination: YouMusicTopLevelDestination,
     isSelected: Boolean,
     onClick: () -> Unit
@@ -83,8 +110,26 @@ private fun BottomNavItem(
 
     val scale by animateFloatAsState(
         targetValue = if (isPressed) 0.88f else 1f,
-        animationSpec = YouMusicMotion.SpatialExpressiveFast,
-        label = "NavItemScale"
+        animationSpec = spring(dampingRatio = 0.7f, stiffness = 800f),
+        label = "DockItemScale"
+    )
+
+    val pillWidth by animateDpAsState(
+        targetValue = if (isSelected) 56.dp else 38.dp,
+        animationSpec = spring(dampingRatio = 0.7f, stiffness = 800f),
+        label = "DockPillWidth"
+    )
+
+    val pillColor by animateColorAsState(
+        targetValue = if (isSelected) MaterialTheme.colorScheme.primaryContainer else Color.Transparent,
+        animationSpec = spring(dampingRatio = 0.8f, stiffness = 600f),
+        label = "DockPillColor"
+    )
+
+    val iconTint by animateColorAsState(
+        targetValue = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant,
+        animationSpec = spring(dampingRatio = 0.8f, stiffness = 600f),
+        label = "DockIconTint"
     )
 
     Column(
@@ -96,121 +141,39 @@ private fun BottomNavItem(
                 indication = null,
                 onClick = onClick
             )
-            .padding(horizontal = 16.dp, vertical = 6.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(horizontal = 8.dp, vertical = 4.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        val pillColor = if (isSelected) {
-            MaterialTheme.colorScheme.primaryContainer
-        } else {
-            Color.Transparent
-        }
-
-        val iconTint = if (isSelected) {
-            MaterialTheme.colorScheme.onPrimaryContainer
-        } else {
-            MaterialTheme.colorScheme.onSurfaceVariant
-        }
-
         Box(
             modifier = Modifier
-                .size(width = 54.dp, height = 30.dp)
+                .width(pillWidth)
+                .height(28.dp)
                 .clip(CircleShape)
                 .background(pillColor),
             contentAlignment = Alignment.Center
         ) {
-            when (destination) {
-                YouMusicTopLevelDestination.HOME -> HomeIcon(tint = iconTint)
-                YouMusicTopLevelDestination.SEARCH -> SearchIcon(tint = iconTint)
-                YouMusicTopLevelDestination.LIBRARY -> LibraryIcon(tint = iconTint)
+            val iconVector = when (destination) {
+                YouMusicTopLevelDestination.HOME -> Icons.Default.Home
+                YouMusicTopLevelDestination.SEARCH -> Icons.Default.Search
+                YouMusicTopLevelDestination.LIBRARY -> Icons.Default.LibraryMusic
             }
+            Icon(
+                imageVector = iconVector,
+                contentDescription = stringResource(destination.labelRes),
+                tint = iconTint,
+                modifier = Modifier.size(20.dp)
+            )
         }
 
-        Spacer(modifier = Modifier.height(3.dp))
+        Spacer(modifier = Modifier.height(2.dp))
 
         Text(
             text = stringResource(destination.labelRes),
             style = MaterialTheme.typography.labelSmall,
+            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
             color = if (isSelected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
-            fontSize = 11.sp
-        )
-    }
-}
-
-@Composable
-private fun HomeIcon(tint: Color) {
-    androidx.compose.foundation.Canvas(modifier = Modifier.size(18.dp)) {
-        val w = size.width
-        val h = size.height
-
-        val path = Path().apply {
-            moveTo(w * 0.5f, h * 0.1f)
-            lineTo(w * 0.9f, h * 0.45f)
-            lineTo(w * 0.78f, h * 0.45f)
-            lineTo(w * 0.78f, h * 0.9f)
-            lineTo(w * 0.22f, h * 0.9f)
-            lineTo(w * 0.22f, h * 0.45f)
-            lineTo(w * 0.1f, h * 0.45f)
-            close()
-        }
-        drawPath(path = path, color = tint)
-    }
-}
-
-@Composable
-private fun SearchIcon(tint: Color) {
-    androidx.compose.foundation.Canvas(modifier = Modifier.size(18.dp)) {
-        val strokeWidth = 2.2f.dp.toPx()
-        val radius = size.width * 0.34f
-        val center = androidx.compose.ui.geometry.Offset(size.width * 0.42f, size.height * 0.42f)
-
-        drawCircle(
-            color = tint,
-            radius = radius,
-            center = center,
-            style = androidx.compose.ui.graphics.drawscope.Stroke(width = strokeWidth)
-        )
-
-        drawLine(
-            color = tint,
-            start = androidx.compose.ui.geometry.Offset(center.x + radius * 0.7f, center.y + radius * 0.7f),
-            end = androidx.compose.ui.geometry.Offset(size.width * 0.9f, size.height * 0.9f),
-            strokeWidth = strokeWidth,
-            cap = androidx.compose.ui.graphics.StrokeCap.Round
-        )
-    }
-}
-
-@Composable
-private fun LibraryIcon(tint: Color) {
-    androidx.compose.foundation.Canvas(modifier = Modifier.size(18.dp)) {
-        val w = size.width
-        val h = size.height
-        val stroke = 2.2f.dp.toPx()
-
-        drawLine(
-            color = tint,
-            start = androidx.compose.ui.geometry.Offset(w * 0.15f, h * 0.2f),
-            end = androidx.compose.ui.geometry.Offset(w * 0.15f, h * 0.85f),
-            strokeWidth = stroke,
-            cap = androidx.compose.ui.graphics.StrokeCap.Round
-        )
-
-        drawLine(
-            color = tint,
-            start = androidx.compose.ui.geometry.Offset(w * 0.45f, h * 0.2f),
-            end = androidx.compose.ui.geometry.Offset(w * 0.45f, h * 0.85f),
-            strokeWidth = stroke,
-            cap = androidx.compose.ui.graphics.StrokeCap.Round
-        )
-
-        val slantPath = Path().apply {
-            moveTo(w * 0.72f, h * 0.2f)
-            lineTo(w * 0.88f, h * 0.85f)
-        }
-        drawPath(
-            path = slantPath,
-            color = tint,
-            style = androidx.compose.ui.graphics.drawscope.Stroke(width = stroke, cap = androidx.compose.ui.graphics.StrokeCap.Round)
+            fontSize = 10.5.sp
         )
     }
 }

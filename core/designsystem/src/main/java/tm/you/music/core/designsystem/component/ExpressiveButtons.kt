@@ -9,6 +9,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Pause
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -110,38 +113,10 @@ fun PlayPauseIcon(
     tint: Color,
     modifier: Modifier = Modifier
 ) {
-    androidx.compose.foundation.Canvas(modifier = modifier) {
-        val width = size.width
-        val height = size.height
-
-        if (isPlaying) {
-            val barWidth = width * 0.28f
-            val spacing = width * 0.24f
-            val cornerRadius = androidx.compose.ui.geometry.CornerRadius(4f, 4f)
-
-            drawRoundRect(
-                color = tint,
-                topLeft = androidx.compose.ui.geometry.Offset(0f, 0f),
-                size = androidx.compose.ui.geometry.Size(barWidth, height),
-                cornerRadius = cornerRadius
-            )
-            drawRoundRect(
-                color = tint,
-                topLeft = androidx.compose.ui.geometry.Offset(barWidth + spacing, 0f),
-                size = androidx.compose.ui.geometry.Size(barWidth, height),
-                cornerRadius = cornerRadius
-            )
-        } else {
-            val path = androidx.compose.ui.graphics.Path().apply {
-                moveTo(width * 0.15f, 0f)
-                lineTo(width * 0.95f, height * 0.5f)
-                lineTo(width * 0.15f, height)
-                close()
-            }
-            drawPath(
-                path = path,
-                color = tint
-            )
-        }
-    }
+    Icon(
+        imageVector = if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
+        contentDescription = if (isPlaying) "Pause" else "Play",
+        tint = tint,
+        modifier = modifier
+    )
 }
