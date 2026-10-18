@@ -204,9 +204,10 @@ private fun PlayerTopBar(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 letterSpacing = 0.5.sp
             )
-            if (!song.album.isNullOrEmpty()) {
+            val album = song.album
+            if (!album.isNullOrEmpty()) {
                 Text(
-                    text = song.album,
+                    text = album,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1,

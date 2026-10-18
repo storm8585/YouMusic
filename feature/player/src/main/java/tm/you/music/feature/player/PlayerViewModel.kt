@@ -59,16 +59,15 @@ class PlayerViewModel @Inject constructor(
     val uiState: StateFlow<PlayerUiState> = combine(
         musicPlayer.playbackState,
         musicPlayer.currentQueue,
-        musicPlayer.isShuffle,
-        musicPlayer.isRepeat,
+        combine(musicPlayer.isShuffle, musicPlayer.isRepeat, ::Pair),
         isFavoriteFlow,
         isQueueExpandedFlow
-    ) { playback, queue, shuffle, repeat, fav, queueExpanded ->
+    ) { playback, queue, shuffleRepeat, fav, queueExpanded ->
         PlayerUiState(
             playbackState = playback,
             queue = queue,
-            isShuffleEnabled = shuffle,
-            isRepeatEnabled = repeat,
+            isShuffleEnabled = shuffleRepeat.first,
+            isRepeatEnabled = shuffleRepeat.second,
             isFavorite = fav,
             isQueueExpanded = queueExpanded
         )
