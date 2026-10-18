@@ -37,8 +37,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import tm.you.music.core.designsystem.R
 import tm.you.music.core.designsystem.component.TrackItemCard
@@ -46,6 +46,7 @@ import tm.you.music.core.designsystem.theme.LargeIncreasedShape
 import tm.you.music.core.designsystem.theme.TitleLargeEmphasized
 import tm.you.music.core.designsystem.theme.TitleMediumEmphasized
 import tm.you.music.core.designsystem.theme.YouMusicMotion
+import tm.you.music.core.model.Song
 
 @Composable
 fun LibraryRoute(
@@ -53,7 +54,7 @@ fun LibraryRoute(
     modifier: Modifier = Modifier,
     viewModel: LibraryViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsState()
     LibraryScreen(
         uiState = uiState,
         onFilterSelect = viewModel::onFilterSelected,

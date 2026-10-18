@@ -31,9 +31,9 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import tm.you.music.core.designsystem.component.ExpressivePlayPauseButton
 import tm.you.music.core.designsystem.component.WaveformProgressBar
@@ -48,7 +48,7 @@ fun PlayerRoute(
     modifier: Modifier = Modifier,
     viewModel: PlayerViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsState()
     PlayerScreen(
         uiState = uiState,
         onDismiss = onDismiss,
