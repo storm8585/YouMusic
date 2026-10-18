@@ -3,6 +3,9 @@ package tm.you.music.feature.player
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.material3.ripple
+import androidx.compose.runtime.remember
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -47,8 +50,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import tm.you.music.core.designsystem.component.ExpressivePlayPauseButton
-import tm.you.music.core.designsystem.component.WaveformProgressBar
+import tm.you.music.core.designsystem.component.ExpressiveMusicSlider
 import tm.you.music.core.designsystem.theme.ExtraLargeIncreasedShape
+import tm.you.music.core.designsystem.theme.HeadlineSmallEmphasized
 import tm.you.music.core.designsystem.theme.TitleLargeEmphasized
 import tm.you.music.core.designsystem.theme.YouMusicMotion
 import tm.you.music.core.model.Song
@@ -142,11 +146,10 @@ fun PlayerScreen(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        WaveformProgressBar(
+        ExpressiveMusicSlider(
             currentPositionMs = uiState.playbackState.currentPositionMs,
             durationMs = uiState.playbackState.durationMs,
-            onSeek = onSeek,
-            barCount = 38
+            onSeek = onSeek
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -248,8 +251,7 @@ private fun PlayerSongInfoRow(
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = song.title,
-                style = TitleLargeEmphasized,
-                fontSize = 24.sp,
+                style = HeadlineSmallEmphasized,
                 color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -382,7 +384,11 @@ private fun QueueDrawerPeek(
             .fillMaxWidth()
             .clip(CircleShape)
             .background(MaterialTheme.colorScheme.surfaceContainerLow)
-            .clickable(onClick = onClick)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = ripple(),
+                onClick = onClick
+            )
             .padding(horizontal = 20.dp, vertical = 12.dp),
         contentAlignment = Alignment.Center
     ) {

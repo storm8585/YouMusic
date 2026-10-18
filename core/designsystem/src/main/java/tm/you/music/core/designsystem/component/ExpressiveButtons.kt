@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -40,8 +41,8 @@ fun ExpressivePlayPauseButton(
     val isPressed by interactionSource.collectIsPressedAsState()
 
     val scale by animateFloatAsState(
-        targetValue = if (isPressed) 0.88f else 1f,
-        animationSpec = YouMusicMotion.SpatialExpressiveFast,
+        targetValue = if (isPressed) 0.92f else 1f,
+        animationSpec = YouMusicMotion.TouchFeedbackSpring,
         label = "PlayPauseButtonScale"
     )
 
@@ -54,7 +55,7 @@ fun ExpressivePlayPauseButton(
             .background(containerColor)
             .clickable(
                 interactionSource = interactionSource,
-                indication = null,
+                indication = ripple(color = contentColor),
                 onClick = onTogglePlayPause
             ),
         contentAlignment = Alignment.Center
@@ -80,8 +81,8 @@ fun ExpressiveIconButton(
     val isPressed by interactionSource.collectIsPressedAsState()
 
     val scale by animateFloatAsState(
-        targetValue = if (isPressed) 0.85f else 1f,
-        animationSpec = YouMusicMotion.SpatialExpressiveFast,
+        targetValue = if (isPressed) 0.88f else 1f,
+        animationSpec = YouMusicMotion.TouchFeedbackSpring,
         label = "IconButtonScale"
     )
 
@@ -93,7 +94,7 @@ fun ExpressiveIconButton(
             .clip(CircleShape)
             .clickable(
                 interactionSource = interactionSource,
-                indication = null,
+                indication = ripple(bounded = false, radius = size / 2),
                 onClick = onClick
             ),
         contentAlignment = Alignment.Center

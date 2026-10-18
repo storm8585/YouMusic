@@ -30,6 +30,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -43,6 +44,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import tm.you.music.core.designsystem.R
+import tm.you.music.core.designsystem.theme.YouMusicMotion
 
 enum class YouMusicTopLevelDestination(
     val route: String,
@@ -110,7 +112,7 @@ private fun ExpressiveDockItem(
 
     val scale by animateFloatAsState(
         targetValue = if (isPressed) 0.88f else 1f,
-        animationSpec = spring(dampingRatio = 0.7f, stiffness = 800f),
+        animationSpec = YouMusicMotion.TouchFeedbackSpring,
         label = "DockItemScale"
     )
 
@@ -138,7 +140,7 @@ private fun ExpressiveDockItem(
             .clip(CircleShape)
             .clickable(
                 interactionSource = interactionSource,
-                indication = null,
+                indication = ripple(),
                 onClick = onClick
             )
             .padding(horizontal = 8.dp, vertical = 4.dp),
@@ -172,8 +174,7 @@ private fun ExpressiveDockItem(
             text = stringResource(destination.labelRes),
             style = MaterialTheme.typography.labelSmall,
             fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-            color = if (isSelected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
-            fontSize = 10.5.sp
+            color = if (isSelected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }

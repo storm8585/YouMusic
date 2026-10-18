@@ -15,9 +15,9 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -46,7 +46,7 @@ fun TrackItemCard(
 
     val scale by animateFloatAsState(
         targetValue = if (isPressed) 0.97f else 1f,
-        animationSpec = YouMusicMotion.SpatialExpressiveFast,
+        animationSpec = YouMusicMotion.TouchFeedbackSpring,
         label = "TrackItemScale"
     )
 
@@ -55,10 +55,10 @@ fun TrackItemCard(
             .fillMaxWidth()
             .heightIn(min = 64.dp)
             .scale(scale)
-            .clip(RoundedCornerShape(12.dp))
+            .clip(MaterialTheme.shapes.medium)
             .clickable(
                 interactionSource = interactionSource,
-                indication = null,
+                indication = ripple(),
                 onClick = onClick
             )
             .padding(horizontal = 12.dp, vertical = 6.dp),
@@ -67,7 +67,7 @@ fun TrackItemCard(
         Box(
             modifier = Modifier
                 .size(52.dp)
-                .clip(RoundedCornerShape(14.dp))
+                .clip(MaterialTheme.shapes.medium)
                 .background(MaterialTheme.colorScheme.surfaceContainerHigh)
         ) {
             if (!song.artworkUrl.isNullOrEmpty()) {

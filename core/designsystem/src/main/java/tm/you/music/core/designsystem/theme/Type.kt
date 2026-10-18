@@ -123,6 +123,30 @@ val TabularTimeStyle = TextStyle(
     fontFeatureSettings = "tnum"
 )
 
+val HeadlineLargeEmphasized = TextStyle(
+    fontFamily = FontFamily.Default,
+    fontWeight = FontWeight.Bold,
+    fontSize = 32.sp,
+    lineHeight = 38.sp,
+    letterSpacing = 0.sp
+)
+
+val HeadlineMediumEmphasized = TextStyle(
+    fontFamily = FontFamily.Default,
+    fontWeight = FontWeight.Bold,
+    fontSize = 28.sp,
+    lineHeight = 34.sp,
+    letterSpacing = 0.sp
+)
+
+val HeadlineSmallEmphasized = TextStyle(
+    fontFamily = FontFamily.Default,
+    fontWeight = FontWeight.Bold,
+    fontSize = 24.sp,
+    lineHeight = 30.sp,
+    letterSpacing = 0.sp
+)
+
 val TitleLargeEmphasized = TextStyle(
     fontFamily = FontFamily.Default,
     fontWeight = FontWeight.Bold,
@@ -137,6 +161,14 @@ val TitleMediumEmphasized = TextStyle(
     fontSize = 16.sp,
     lineHeight = 20.sp,
     letterSpacing = 0.15.sp
+)
+
+val TitleSmallEmphasized = TextStyle(
+    fontFamily = FontFamily.Default,
+    fontWeight = FontWeight.SemiBold,
+    fontSize = 14.sp,
+    lineHeight = 18.sp,
+    letterSpacing = 0.1.sp
 )
 
 val LabelLargeEmphasized = TextStyle(

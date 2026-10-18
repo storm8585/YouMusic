@@ -13,7 +13,11 @@ val Shapes = Shapes(
     extraLarge = RoundedCornerShape(28.dp)
 )
 
-val LargeIncreasedShape = RoundedCornerShape(20.dp)
+val SmallShape = RoundedCornerShape(8.dp)
+val MediumShape = RoundedCornerShape(12.dp)
+val LargeShape = RoundedCornerShape(16.dp)
+val LargeIncreasedShape = RoundedCornerShape(24.dp)
+val ExtraLargeShape = RoundedCornerShape(28.dp)
 val ExtraLargeIncreasedShape = RoundedCornerShape(32.dp)
 val ExtraExtraLargeShape = RoundedCornerShape(48.dp)
 val FullPillShape = CircleShape

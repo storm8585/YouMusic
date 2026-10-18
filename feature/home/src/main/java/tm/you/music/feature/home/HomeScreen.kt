@@ -21,10 +21,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -36,7 +36,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
@@ -45,6 +44,7 @@ import tm.you.music.core.designsystem.component.TrackItemCard
 import tm.you.music.core.designsystem.theme.LargeIncreasedShape
 import tm.you.music.core.designsystem.theme.TitleLargeEmphasized
 import tm.you.music.core.designsystem.theme.TitleMediumEmphasized
+import tm.you.music.core.designsystem.theme.TitleSmallEmphasized
 import tm.you.music.core.designsystem.theme.YouMusicMotion
 import tm.you.music.core.model.Song
 
@@ -269,8 +269,8 @@ private fun QuickAccessCard(
     val isPressed by interactionSource.collectIsPressedAsState()
 
     val scale by animateFloatAsState(
-        targetValue = if (isPressed) 0.96f else 1f,
-        animationSpec = YouMusicMotion.SpatialExpressiveFast,
+        targetValue = if (isPressed) 0.97f else 1f,
+        animationSpec = YouMusicMotion.TouchFeedbackSpring,
         label = "QuickAccessScale"
     )
 
@@ -278,11 +278,11 @@ private fun QuickAccessCard(
         modifier = modifier
             .height(56.dp)
             .scale(scale)
-            .clip(RoundedCornerShape(8.dp))
+            .clip(MaterialTheme.shapes.small)
             .background(MaterialTheme.colorScheme.surfaceContainerLow)
             .clickable(
                 interactionSource = interactionSource,
-                indication = null,
+                indication = ripple(),
                 onClick = onClick
             ),
         verticalAlignment = Alignment.CenterVertically
@@ -306,11 +306,10 @@ private fun QuickAccessCard(
 
         Text(
             text = song.title,
-            style = TitleMediumEmphasized,
+            style = TitleSmallEmphasized,
             color = MaterialTheme.colorScheme.onSurface,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
-            fontSize = 13.sp,
             modifier = Modifier
                 .weight(1f)
                 .padding(end = 8.dp)
@@ -328,8 +327,8 @@ private fun TrendingSongCard(
     val isPressed by interactionSource.collectIsPressedAsState()
 
     val scale by animateFloatAsState(
-        targetValue = if (isPressed) 0.95f else 1f,
-        animationSpec = YouMusicMotion.SpatialExpressiveFast,
+        targetValue = if (isPressed) 0.96f else 1f,
+        animationSpec = YouMusicMotion.TouchFeedbackSpring,
         label = "TrendingSongScale"
     )
 
@@ -337,9 +336,10 @@ private fun TrendingSongCard(
         modifier = modifier
             .width(148.dp)
             .scale(scale)
+            .clip(MaterialTheme.shapes.medium)
             .clickable(
                 interactionSource = interactionSource,
-                indication = null,
+                indication = ripple(),
                 onClick = onClick
             )
     ) {

@@ -21,7 +21,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Favorite
@@ -29,6 +28,7 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -41,13 +41,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import tm.you.music.core.designsystem.R
 import tm.you.music.core.designsystem.component.TrackItemCard
 import tm.you.music.core.designsystem.theme.LargeIncreasedShape
+import tm.you.music.core.designsystem.theme.HeadlineMediumEmphasized
 import tm.you.music.core.designsystem.theme.TitleLargeEmphasized
 import tm.you.music.core.designsystem.theme.TitleMediumEmphasized
 import tm.you.music.core.designsystem.theme.YouMusicMotion
@@ -161,8 +161,7 @@ private fun LibraryHeaderSection(
         ) {
             Text(
                 text = stringResource(R.string.library_title),
-                style = TitleLargeEmphasized,
-                fontSize = 28.sp,
+                style = HeadlineMediumEmphasized,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
@@ -192,8 +191,8 @@ private fun LibraryHeaderSection(
         ) {
             items(filters) { filter ->
                 val isSelected = filter == selectedFilter
-                val containerColor = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceContainer
-                val contentColor = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
+                val containerColor = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerLow
+                val contentColor = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
 
                 Box(
                     modifier = Modifier
@@ -223,8 +222,8 @@ private fun LikedSongsPinnedBanner(
     val isPressed by interactionSource.collectIsPressedAsState()
 
     val scale by animateFloatAsState(
-        targetValue = if (isPressed) 0.97f else 1f,
-        animationSpec = YouMusicMotion.SpatialExpressiveFast,
+        targetValue = if (isPressed) 0.98f else 1f,
+        animationSpec = YouMusicMotion.TouchFeedbackSpring,
         label = "LikedSongsBannerScale"
     )
 
@@ -244,7 +243,7 @@ private fun LikedSongsPinnedBanner(
             )
             .clickable(
                 interactionSource = interactionSource,
-                indication = null,
+                indication = ripple(),
                 onClick = onClick
             )
             .padding(18.dp)
@@ -274,7 +273,6 @@ private fun LikedSongsPinnedBanner(
                 Text(
                     text = stringResource(R.string.library_liked_songs),
                     style = TitleMediumEmphasized,
-                    fontSize = 18.sp,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(2.dp))
@@ -314,7 +312,7 @@ private fun PlaylistItemCard(
 
     val scale by animateFloatAsState(
         targetValue = if (isPressed) 0.97f else 1f,
-        animationSpec = YouMusicMotion.SpatialExpressiveFast,
+        animationSpec = YouMusicMotion.TouchFeedbackSpring,
         label = "PlaylistItemScale"
     )
 
@@ -322,9 +320,10 @@ private fun PlaylistItemCard(
         modifier = modifier
             .fillMaxWidth()
             .scale(scale)
+            .clip(MaterialTheme.shapes.medium)
             .clickable(
                 interactionSource = interactionSource,
-                indication = null,
+                indication = ripple(),
                 onClick = onClick
             )
             .padding(horizontal = 16.dp, vertical = 8.dp),
@@ -333,7 +332,7 @@ private fun PlaylistItemCard(
         Box(
             modifier = Modifier
                 .size(60.dp)
-                .clip(RoundedCornerShape(12.dp))
+                .clip(MaterialTheme.shapes.medium)
                 .background(MaterialTheme.colorScheme.surfaceContainerHigh)
         ) {
             if (!playlist.artworkUrl.isNullOrEmpty()) {
